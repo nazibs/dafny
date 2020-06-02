@@ -48,21 +48,21 @@ function listContains<T>(xs:List<T>, element:T):bool
 lemma sameElements<T>(tree:Tree<T>, element:T)
 ensures treeContains(tree, element) <==> listContains(flatten(tree), element)
 {   
-    // match(tree)
-    // case Leaf => {}
-    // case Node(left, right, ele) => {
-    //     calc { treeContains(tree, element) ;
-    //         == treeContains(Node(left, right, ele), element) ;
-    //         == treeContains(left, element) || treeContains(right, element) || (ele == element) ;
-    //         == listContains(flatten(left), element) || listContains(flatten(right), element) || (ele == element) ;
+    match(tree)
+    case Leaf => {}
+    case Node(left, right, ele) => {
+        calc { treeContains(tree, element) ;
+            == treeContains(Node(left, right, ele), element) ;
+            == treeContains(left, element) || treeContains(right, element) || (ele == element) ;
+            == listContains(flatten(left), element) || listContains(flatten(right), element) || (ele == element) ;
             
-    //         == listContains(flatten(left), element) || listContains(flatten(right), element) || listContains(Cons(ele, Nil), element) ;
-    //         == listContains(flatten(left), element) || listContains(append(flatten(right), Cons(ele, Nil)), element) ;
-    //         == listContains(append(flatten(left), append(flatten(right), Cons(ele, Nil))), element) ;
-    //         == listContains(flatten(tree), element) ;
+            == listContains(flatten(left), element) || listContains(flatten(right), element) || listContains(Cons(ele, Nil), element) ;
+            == listContains(flatten(left), element) || listContains(append(flatten(right), Cons(ele, Nil)), element) ;
+            == listContains(append(flatten(left), append(flatten(right), Cons(ele, Nil))), element) ;
+            == listContains(flatten(tree), element) ;
 
         
-    //     }
-    // }
+        }
+    }
 	
 }
