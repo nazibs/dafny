@@ -45,6 +45,22 @@ function listContains<T>(xs:List<T>, element:T):bool
     case Cons(x, xs') => (x==element) || listContains(xs', element)
 }   
 
+ghost method listContains_Exp<T>(xs:List<T>, ys:List<T>, element:T)
+ensures listContains(append(xs, ys), element) ==  (listContains(xs, element) || listContains(ys, element))
+{
+    match(xs)
+    case Nil => { }
+    case Cons(x,xs') => {
+        calc {
+            listContains(append(xs, ys), element) ;
+
+            == listContains(Cons(x, append(xs', ys)), element) ;
+
+            == listContains(xs, element) || listContains(ys, element) ;
+        } 
+    }
+
+}
 
 lemma sameElements<T>(tree:Tree<T>, element:T)
 ensures treeContains(tree, element) <==> listContains(flatten(tree), element)
@@ -66,11 +82,11 @@ ensures treeContains(tree, element) <==> listContains(flatten(tree), element)
 
             == listContains(flatten(left), element) || listContains(append(Cons(ele, Nil), flatten(right)), element) ;
             
+            == {listContains_Exp(flatten(left), append(Cons(ele, Nil), flatten(right)), element);}
             
-            == listContains(append(flatten(left), append(Cons(ele, Nil), flatten(right) )), element) ;
+            listContains(append(flatten(left), append(Cons(ele, Nil), flatten(right))), element) ;
 
             == listContains(flatten(tree), element) ;
         }
     }
-	
 }
