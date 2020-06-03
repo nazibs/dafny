@@ -52,16 +52,29 @@ ensures treeContains(tree, element) <==> listContains(flatten(tree), element)
     case Leaf => {}
     case Node(left, right, ele) => {
         calc { treeContains(tree, element) ;
-            == treeContains(Node(left, right, ele), element) ;
-            == treeContains(left, element) || treeContains(right, element) || (ele == element) ;
-            == listContains(flatten(left), element) || listContains(flatten(right), element) || (ele == element) ;
-            
-            == listContains(flatten(left), element) || listContains(flatten(right), element) || listContains(Cons(ele, Nil), element) ;
-            == listContains(flatten(left), element) || listContains(append(flatten(right), Cons(ele, Nil)), element) ;
-            == listContains(append(flatten(left), append(flatten(right), Cons(ele, Nil))), element) ;
-            == listContains(flatten(tree), element) ;
 
+            == treeContains(Node(left, right, ele), element) ;
         
+            == treeContains(left, element) || treeContains(right, element) || (ele == element) ;
+        
+            == listContains(flatten(left), element) || listContains(flatten(right), element) || (ele == element) ;
+
+
+            == listContains(flatten(left), element) || listContains(Cons(ele, flatten(right)), element) ;
+
+            == listContains(flatten(left), element) || listContains(append(Cons(ele, flatten(right)), Nil), element) ;
+
+            == listContains(flatten(left), element) || listContains(append(Cons(ele, Nil), flatten(right)), element) ;
+
+
+
+            // == listContains(flatten(left), element) || listContains(flatten(right), element) || listContains(Cons(ele, Nil), element) ;
+
+            == listContains(flatten(left), element) || listContains(append(flatten(right), Cons(ele, Nil)), element) ;
+
+            == listContains(append(flatten(left), append(flatten(right), Cons(ele, Nil))), element) ;
+
+            == listContains(flatten(tree), element) ;
         }
     }
 	
